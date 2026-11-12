@@ -6,6 +6,25 @@ SentinelFIM is a Python-based cybersecurity project that monitors files for unau
 
 The system maintains trusted file hash baselines, detects file creation, modification and deletion, and records security events in an SQLite database. A Flask web dashboard allows users to review events, perform integrity scans, approve new files and export security reports.
 
+
+## 📸 Project Screenshots
+
+### 1. SentinelFIM Dashboard
+The main dashboard displays security statistics, file integrity verification options, and security event filters.
+
+![SentinelFIM Dashboard](screenshots/dashboard.png)
+
+### 2. Recent Security Events
+Displays detected file activities, including file creation, modification, deletion, and integrity violations with severity levels.
+
+![Security Events](screenshots/security-events.png)
+
+### 3. File Integrity Scan Results
+Displays the results of SHA-256 integrity verification, identifying verified, unregistered, and modified files.
+
+![Integrity Scan Results](screenshots/scan-results.png)
+
+
 ## Key Features
 
 - **SHA-256 Hashing:** Calculates file hashes to verify file integrity.

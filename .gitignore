@@ -1,0 +1,23 @@
+
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Local database and runtime data
+database/*.db
+
+# Environment variables
+.env
+
+# Editor and operating system files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local monitored test files
+monitored_files/*
+!monitored_files/.gitkeep

@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Integrity Scan Results | SentinelFIM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>SentinelFIM</h1>
+        <p>File Integrity Scan Results</p>
+    </div>
+    <a href="/" class="back-link">Back to Dashboard</a>
+</header>
+
+<main>
+    <section class="welcome">
+        <h2>Integrity Scan Report</h2>
+        <p>Total files and baseline records checked: {{ total }}</p>
+    </section>
+
+    <section class="events">
+        <table>
+            <thead>
+                <tr>
+                    <th>File Path</th>
+                    <th>Scan Status</th>
+                    <th>Trusted Hash</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in results %}
+                <tr>
+                    <td>{{ item.file_path }}</td>
+                    <td>
+   {% if item.status == 'INTEGRITY_VIOLATION' %}
+    <span class="severity high">INTEGRITY VIOLATION</span>
+
+{% elif item.status == 'MISSING' %}
+    <span class="severity high">MISSING</span>
+
+{% elif item.status == 'UNREGISTERED' %}
+    <span class="severity medium">UNREGISTERED</span>
+
+    <form action="/approve" method="POST">
+        <input type="hidden" name="file_path"
+               value="{{ item.file_path }}">
+
+        <button type="submit" class="approve-button">
+            Approve & Trust
+        </button>
+    </form>
+
+{% else %}
+    <span class="severity low">VERIFIED</span>
+{% endif %}
+</td>
+                    <td>
+                        {% if item.trusted_hash %}
+                            {{ item.trusted_hash[:16] }}...
+                        {% else %}
+                            Not registered
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">No files or baseline records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<footer>
+    SentinelFIM | Integrity Verification
+</footer>
+
+</body>
+</html>

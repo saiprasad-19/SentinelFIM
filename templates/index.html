@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentinelFIM | Security Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>🛡 SentinelFIM</h1>
+            <p>File Integrity Monitoring System</p>
+        </div>
+        <span class="status">● Security Monitoring Dashboard</span>
+    </header>
+
+    <main>
+
+        <section class="welcome">
+            <h2>Security Overview</h2>
+            <p>Monitor file integrity and review security events.</p>
+        </section>
+
+        <section class="cards">
+
+            <div class="card">
+                <h3>Total Events</h3>
+                <p>{{ total_events }}</p>
+            </div>
+
+            <div class="card created">
+                <h3>Files Created</h3>
+                <p>{{ created }}</p>
+            </div>
+
+            <div class="card modified">
+                <h3>Files Modified</h3>
+                <p>{{ modified }}</p>
+            </div>
+
+            <div class="card deleted">
+                <h3>Files Deleted</h3>
+                <p>{{ deleted }}</p>
+            </div>
+
+        </section>
+
+
+<section class="scan-section">
+    <div>
+        <h2>File Integrity Verification</h2>
+        <p>Check monitored files against their trusted SHA-256 baselines.</p>
+    </div>
+
+    <div class="scan-actions">
+    <form action="/scan" method="POST">
+        <button type="submit" class="scan-button">
+            Run Integrity Scan
+        </button>
+    </form>
+
+    <a href="/export" class="export-button">
+        Download CSV Report
+    </a>
+</div>
+</section>
+
+<section class="filters">
+
+    <h2>Search & Filter Security Events</h2>
+
+    <form action="/" method="GET">
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search by file path..."
+            value="{{ search }}"
+        >
+
+        <select name="severity">
+            <option value="">All Severities</option>
+            <option value="HIGH" {% if severity == 'HIGH' %}selected{% endif %}>High</option>
+            <option value="MEDIUM" {% if severity == 'MEDIUM' %}selected{% endif %}>Medium</option>
+            <option value="LOW" {% if severity == 'LOW' %}selected{% endif %}>Low</option>
+        </select>
+
+        <select name="event_type">
+            <option value="">All Event Types</option>
+            <option value="FILE_CREATED" {% if event_type == 'FILE_CREATED' %}selected{% endif %}>File Created</option>
+            <option value="FILE_MODIFIED" {% if event_type == 'FILE_MODIFIED' %}selected{% endif %}>File Modified</option>
+            <option value="INTEGRITY_VIOLATION" {% if event_type == 'INTEGRITY_VIOLATION' %}selected{% endif %}>Integrity Violation</option>
+            <option value="FILE_DELETED" {% if event_type == 'FILE_DELETED' %}selected{% endif %}>File Deleted</option>
+            <option value="FILE_RESTORED" {% if event_type == 'FILE_RESTORED' %}selected{% endif %}>File Restored</option>
+        </select>
+
+        <button type="submit">Apply Filters</button>
+
+        <a href="/">Clear Filters</a>
+
+    </form>
+
+</section>
+        <section class="events">
+            <h2>Recent Security Events</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>File Path</th>
+                        <th>Event Type</th>
+                        <th>Severity</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>{{ event.id }}</td>
+                        <td>{{ event.file_path }}</td>
+                        <td>{{ event.event_type }}</td>
+                        <td>
+                              {% if event.severity == 'HIGH' %}
+        <span class="severity high">HIGH</span>
+    {% elif event.severity == 'MEDIUM' %}
+        <span class="severity medium">MEDIUM</span>
+    {% else %}
+        <span class="severity low">LOW</span>
+    {% endif %}
+</td>
+                        <td>{{ event.event_time }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4">No security events found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <footer>
+        SentinelFIM | File Integrity Monitoring System
+    </footer>
+
+</body>
+</html>
